@@ -5,7 +5,7 @@
 - 无公网环境
 - 不同操作系统python环境的兼容问题
 
-## 使用方式
+## 使用
 
 ### 「1」制作虚拟环境
     
@@ -98,3 +98,7 @@ total 50548
 (alfonstest) [root@cf93a868310e alfonstest]# python --version
 Python 3.8.18
 ```
+
+## 无法覆盖的场景
+
+可能会出现 glibc 版本与 操作系统内核不匹配 的问题
