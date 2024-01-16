@@ -25,3 +25,5 @@ RUN echo "Begin build" \
         zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel \
         readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel \
     && yum -y clean all --enablerepo='*'
+
+ENTRYPOINT ["python2", "build.py"]
