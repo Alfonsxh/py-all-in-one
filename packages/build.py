@@ -10,6 +10,7 @@ import argparse
 import functools
 
 root_dir = os.path.dirname(__file__)  # /packages
+root_dir = root_dir if root_dir.strip() else "/packages"
 python_package_dir = os.path.join(root_dir, "Python")  # /packages/Python/
 install_script_template = os.path.join(root_dir, "install.sh")  # /packages/install.sh
 requirements_path = os.path.join(root_dir, "requirements.txt")  # /packages/requirements.txt
@@ -103,7 +104,6 @@ class PythonBuildBase:
         self,
         install_prefix,
         python_version,
-        arch,
         project,
         prompt,
     ):
@@ -111,7 +111,6 @@ class PythonBuildBase:
         Python安装基类
         :param install_prefix: 配置的python sys.path 查找的根目录
         :param python_version: Python环境
-        :param arch: 平台架构: aarch64，
         :param project: 项目名称
         :param prompt: 虚拟环境进入提示
         """
@@ -154,11 +153,12 @@ class PythonBuildBase:
         if not os.path.isdir(self._tar_dir):
             os.makedirs(self._tar_dir)
 
-        self._virtual_archive_path = os.path.join(self._tar_dir, "{project}_env_virtual.tar.gz".format(project=project))  # /build/{project}/{project}_env_virtual.tar.gz
-        self._system_lib_archive_path = os.path.join(self._tar_dir, "system_lib.tar.gz")  # /build/{project}/"system_lib.tar.gz"
-        self._install_script_path = os.path.join(self._tar_dir, "install.sh")  # /build/{project}/install.sh
+        self._virtual_archive_path = os.path.join(self._tar_dir, "{project}_env_virtual.tar.gz".format(project=project))  # /packages/build/{project}/{project}_env_virtual.tar.gz
+        self._system_lib_archive_path = os.path.join(self._tar_dir, "system_lib.tar.gz")  # /packages/build/{project}/"system_lib.tar.gz"
+        self._install_script_path = os.path.join(self._tar_dir, "install.sh")  # /packages/build/{project}/install.sh
 
-        self._python_package_tar = os.path.join(self._build_dir, "{project}_{arch}_env.tar.gz".format(project=project, arch=platform.machine()))   # /build/{project}_{arch}_env.tar.gz
+        self._python_package_tar = os.path.join(self._build_dir,
+                                                "{project}_{arch}_env.tar.gz".format(project=project, arch=platform.machine()))  # /packages/build/{project}_{arch}_env.tar.gz
 
     # ========================= Python环境 =========================
     @rate_log_wrapper(title="编译安装Python主环境")
@@ -271,7 +271,7 @@ class PythonBuildBase:
                 runpath_switch_path = [self._system_ld_load_path]
 
             run_local_cmd(
-                cmd="{patchelf} --set-rpath {rpath} {system_so} 2>/dev/null".format(patchelf=self.patchelf_path, rpath=":".join(runpath_switch_path), system_so=elf_path),
+                cmd="{patchelf} --set-rpath {rpath} {system_so}".format(patchelf=self.patchelf_path, rpath=":".join(runpath_switch_path), system_so=elf_path),
                 raise_when_error=False,
             )
 
@@ -279,7 +279,7 @@ class PythonBuildBase:
 
         if ld_switch:
             run_local_cmd(
-                cmd="{patchelf} --set-interpreter {ld_so} {system_so} 2>/dev/null".format(patchelf=self.patchelf_path, ld_so=self._ld_linux_path_dst, system_so=elf_path),
+                cmd="{patchelf} --set-interpreter {ld_so} {system_so}".format(patchelf=self.patchelf_path, ld_so=self._ld_linux_path_dst, system_so=elf_path),
                 raise_when_error=False,
             )
 
@@ -378,6 +378,7 @@ class PythonBuildBase:
             install_plaintext = f_template.read()
             install_plaintext = install_plaintext.replace("__virtual_env_package__", os.path.basename(self._virtual_archive_path))
             install_plaintext = install_plaintext.replace("__system_lib_package__", os.path.basename(self._system_lib_archive_path))
+            install_plaintext = install_plaintext.replace("__virtual_env_active__", os.path.basename(self._env_virtual_dir))
 
             with open(self._install_script_path, "w") as f:
                 f.write(install_plaintext)
@@ -388,7 +389,7 @@ class PythonBuildBase:
             "&& tar -czf {package_tar} {tar_dir}"
             "".format(
                 build_dir=self._build_dir,
-                package_tar=self._python_package_tar,
+                package_tar=os.path.basename(self._python_package_tar),
                 tar_dir=os.path.basename(self._tar_dir),
             ))
 
@@ -413,6 +414,8 @@ class PythonBuildBase:
 
         # 打包环境
         self.archive()
+
+        printer.print_ok("包位置：{package_file}".format(package_file=self._python_package_tar))
 
 
 class Python2Build(PythonBuildBase):
