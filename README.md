@@ -23,7 +23,7 @@ test
 # docker run -it --rm --platform linux/amd64 \
   -v `pwd`/test/Python:/packages/Python \
   -v `pwd`/test/requirements.txt:/packages/requirements.txt \
-  -v `pwd`/test/build:/packages/build lfonsxh/py-all-in-one:latest --install-dir /usr/local/python_env/ --project alfonstest --python-version 3.8.18
+  -v `pwd`/test/build:/packages/build alfonsxh/py-all-in-one:latest --install-dir /usr/local/python_env/ --project alfonstest --python-version 3.8.18
 ...
 [ OK ]: 包位置：build/alfonstest_x86_64_env.tar.gz
 [ OK ]: 打包[成功]！
