@@ -378,7 +378,7 @@ class PythonBuildBase:
             install_plaintext = f_template.read()
             install_plaintext = install_plaintext.replace("__virtual_env_package__", os.path.basename(self._virtual_archive_path))
             install_plaintext = install_plaintext.replace("__system_lib_package__", os.path.basename(self._system_lib_archive_path))
-            install_plaintext = install_plaintext.replace("__virtual_env_active__", os.path.basename(self._env_virtual_dir))
+            install_plaintext = install_plaintext.replace("__virtual_env_active__", self._env_virtual_dir)
 
             with open(self._install_script_path, "w") as f:
                 f.write(install_plaintext)
