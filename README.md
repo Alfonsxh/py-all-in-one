@@ -54,9 +54,9 @@ optional arguments:
                         指定python的版本
 ```
 
-- `--install-dir` - Python 环境安装的目录
-- `--project` - 项目名称
-- `--python-version` - Python 版本，根据 `pwd`/test/Python 目录下的Python源码包进行选择
+- `--install-dir` - Python 环境安装的目录，对应在部署机器上的路径
+- `--project` - 项目名称，虚拟环境会生成在 `{install-dir}/{python_version}/{project}` 目录下。如：`--install-dir /usr/local/python_env/ --project alfonstest --python-version 3.8.18` -> `/usr/local/python_env/3.8.18/alfonstest`
+- `--python-version` - Python 版本，根据 `pwd`/test/Python 目录下的Python源码包进行选择。暂时只支持先下载 Python 源码的方式
 
 打完包后，会在映射路径下生成Python环境安装包
 
