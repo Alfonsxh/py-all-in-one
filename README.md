@@ -2,12 +2,12 @@
 
 `py-all-in-one` 是一个 python 环境整体打包的项目，解决下面场景中 Python 环境的部署问题：
 
-- 无公网环境
-- 不同操作系统python环境的兼容问题
+- 无公网环境，无法通过网络的方式安装Python及其模块
+- 不同操作系统python环境的兼容问题。python及其模块，会有很多的动态库依赖(xx.so)，这些动态库依赖在打包环境、部署环境不一样，很难通过现有的打包工具解决。
 
-## 使用
+## 🚀简单使用
 
-### 「1」制作虚拟环境
+### 「1」制作虚拟环境（docker）
     
 使用docker镜像进行打包
 
@@ -29,13 +29,14 @@ test
 [ OK ]: 打包[成功]！
 ```
 
-位置解释：
+docker参数解释：
 
-- `pwd`/test/Python - Python安装包位置，打包前需要将Python源码下载保存在该目录。源码下载地址：https://www.python.org/ftp/python/ （当前只支持tgz包）
-- `pwd`/test/requirements.txt - 项目依赖的 Python 模块
-- `pwd`/test/build - 打完包后，保存的目录
+- --platform linux/amd64 - CPU平台，支持 linux/amd64、linux/arm64 两种
+- -v `pwd`/test/Python - Python安装包位置，打包前需要将Python源码下载保存在该目录。源码下载地址：https://www.python.org/ftp/python/ （当前只支持tgz包）
+- -v `pwd`/test/requirements.txt - 项目依赖的 Python 模块
+- -v `pwd`/test/build - 打完包后，保存的目录
 
-打包参数解释：
+项目参数解释：
 
 ```shell
 usage: build.py [-h] [--install-dir PREFIX] --project PROJECT --python-version
