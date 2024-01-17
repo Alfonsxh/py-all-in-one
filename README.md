@@ -31,10 +31,10 @@ test
 
 docker参数解释：
 
-- --platform linux/amd64 - CPU平台，支持 linux/amd64、linux/arm64 两种
-- -v `pwd`/test/Python - Python安装包位置，打包前需要将Python源码下载保存在该目录。源码下载地址：https://www.python.org/ftp/python/ （当前只支持tgz包）
-- -v `pwd`/test/requirements.txt - 项目依赖的 Python 模块
-- -v `pwd`/test/build - 打完包后，保存的目录
+- `--platform linux/amd64` - CPU平台，支持 linux/amd64、linux/arm64 两种
+- `-v {pwd}/test/Python` - Python安装包位置，打包前需要将Python源码下载保存在该目录。源码下载地址：https://www.python.org/ftp/python/ （当前只支持tgz包）
+- `-v {pwd}/test/requirements.txt` - 项目依赖的 Python 模块
+- `-v {pwd}/test/build` - 打完包后，保存的目录
 
 项目参数解释：
 
