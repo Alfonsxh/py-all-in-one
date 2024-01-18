@@ -20,7 +20,7 @@ test
 │ └── Python-3.8.18.tgz
 └── requirements.txt
 
-# docker run -it --rm --platform linux/amd64 \
+# docker run -it --rm --pull always --platform linux/amd64 \
   -v `pwd`/test/Python:/packages/Python \
   -v `pwd`/test/requirements.txt:/packages/requirements.txt \
   -v `pwd`/test/build:/packages/build alfonsxh/py-all-in-one:latest --install-dir /usr/local/python_env/ --project alfonstest --python-version 3.8.18
