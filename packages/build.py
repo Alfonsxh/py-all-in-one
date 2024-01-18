@@ -221,12 +221,16 @@ class PythonBuildBase:
                           "| xargs ldd 2>/dev/null "
                           "| grep = "
                           "| grep -v libpython "
+                          "| grep -v not "
                           "| awk -F\\( '{print $1}' "
                           "| sort | uniq "
                           "| awk  '{print $3}' > %s" % (self._env_root_dir, tmp_lds_path))
 
         with open(tmp_lds_path, "a") as f:
             f.write(self._ld_linux_path_src)
+
+        with open(tmp_lds_path, 'r') as f:
+            printer.print_white(msg=f.read())
 
         with open(tmp_lds_path, 'r') as f:
             for system_so_path in f.readlines():
