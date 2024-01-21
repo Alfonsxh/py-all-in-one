@@ -1,14 +1,15 @@
 # py-all-in-one
 
-`py-all-in-one` 是一个 python 环境整体打包的项目，解决下面场景中 Python 环境的部署问题：
+`py-all-in-one` 是一个 Python 环境整体打包、分发的项目，有点类似于 pyinstaller。
 
-- 无公网环境，无法通过网络的方式安装Python及其模块
-- 不同操作系统python环境的兼容问题。python及其模块，会有很多的动态库依赖(xx.so)，这些动态库依赖在打包环境、部署环境不一样，很难通过现有的打包工具解决。
+主要是为了解决 pyinstaller 无法解决的下面场景：**不同操作系统 Python 环境与系统环境的兼容问题**。
+
+Python及其导入的模块，会有很多的动态库依赖(xx.so)，如果这些动态库依赖在打包环境、部署环境不一样，很难通过现有的打包工具解决。
 
 ## 🚀 简单使用
 
 ### 「1」制作虚拟环境（docker）
-    
+
 使用docker镜像进行打包
 
 ```shell
@@ -32,7 +33,7 @@ test
 docker参数解释：
 
 - `--platform linux/amd64` - CPU平台，支持 linux/amd64、linux/arm64 两种
-- `-v {pwd}/test/Python` - Python安装包位置，打包前需要将Python源码下载保存在该目录。源码下载地址：https://www.python.org/ftp/python/ （当前只支持tgz包）
+- `-v {pwd}/test/Python` - Python安装包位置，打包前需要将Python源码下载保存在该目录。源码下载地址：<https://www.python.org/ftp/python> （当前只支持tgz包）
 - `-v {pwd}/test/requirements.txt` - 项目依赖的 Python 模块
 - `-v {pwd}/test/build` - 打完包后，保存的目录
 
@@ -100,10 +101,12 @@ total 50548
 Python 3.8.18
 ```
 
-## 原理
+## 📖 原理
 
-todo
+- [Python虚拟环境制作](./docs/Python虚拟环境制作.md)
 
-## 无法覆盖的场景
+> 核心：修改可执行程序及动态库的 rpath 路径
 
-可能会出现 glibc 版本与 操作系统内核不匹配 的问题
+## ⚠️ 无法覆盖的场景
+
+通过本项目打出来的 Python 虚拟环境，可能会出现 glibc 版本与 `Linux 操作系统内核不匹配` 的问题。可以通过改变打包镜像的方式进行解决。
